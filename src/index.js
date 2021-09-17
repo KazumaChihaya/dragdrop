@@ -11,9 +11,11 @@ function touchPosition(e) {
 
 // ドラッグ開始
 $('.dragdrop_origin').on('mousedown', function(e) {
+  e.preventDefault();
   startDragSource(e, clickPosition(e));
 });
 $('.dragdrop_origin').on('touchstart', function(e) {
+  e.preventDefault();
   startDragSource(e, touchPosition(e));
 });
 function startDragSource(e, offset) {

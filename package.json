@@ -1,0 +1,26 @@
+{
+  "name": "dragdrop",
+  "version": "1.0.0",
+  "description": "drag and drop function of js",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KazumaChihaya/dragdrop.git"
+  },
+  "keywords": [
+    "drag",
+    "drop"
+  ],
+  "author": "KazumaChihaya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KazumaChihaya/dragdrop/issues"
+  },
+  "homepage": "https://github.com/KazumaChihaya/dragdrop#readme",
+  "dependencies": {
+    "jquery": "^3.6.0"
+  }
+}

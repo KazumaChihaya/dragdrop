@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="node_modules/jquery/dist/jquery.js"></script>
+  <script src="src/index.js" type="module"></script>
+</head>
+<body>
+  <div>
+    <div style="height: 100px;"></div>
+    <div style="width: 100px; display: inline-block;"></div>
+    <div style="display: inline-block;">
+      <div style="height: 100px"></div>
+      <div class="dragging test1" style="position: absolute; top:0px; display: none; pointer-events: none;" data-drag_type="test1">ドラッグされてるやつ</div>
+      <div>
+        <div class="dragdrop_origin test1" data-drag_type="test1">ドラッグされるやつ</div>
+      </div>
+      <div>
+        <div class="dragdrop_dest test1" data-drag_type="test1">ドロップする場所</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

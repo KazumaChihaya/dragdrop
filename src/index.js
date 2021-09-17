@@ -6,7 +6,7 @@ function clickPosition(e) {
 }
 function touchPosition(e) {
   const touch = e.changedTouches[0];
-  return {x: touch.pageX, y: touch.pageY};
+  return {x: touch.pageX - window.pageXOffset, y: touch.pageY - window.pageYOffset};
 }
 
 // ドラッグ開始

@@ -90,13 +90,3 @@ function cancelDragSource() {
   }
   cancelDrag();
 }
-
-function startDrag(dataset) {
-  console.log('startDrag');
-}
-function endDrag(dataset) {
-  console.log('endDrag');
-}
-function cancelDrag() {
-  console.log('cancelDrag');
-}

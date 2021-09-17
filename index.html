@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <script src="node_modules/jquery/dist/jquery.js"></script>
-  <script src="src/index.js" type="module"></script>
 </head>
 <body>
   <div>
@@ -23,5 +22,17 @@
       </div>
     </div>
   </div>
+  <script src="src/index.js" type="module"></script>
+  <script>
+    function startDrag(dataset) {
+      console.log('startDrag');
+    }
+    function endDrag(dataset) {
+      console.log('endDrag');
+    }
+    function cancelDrag() {
+      console.log('cancelDrag');
+    }
+  </script>
 </body>
 </html>

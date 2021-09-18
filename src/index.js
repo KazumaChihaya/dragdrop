@@ -31,11 +31,19 @@ export default function dragdrop(_this) {
   }, {passive: false});
 
   // ドラッグ終了
-  $(document).on('mouseup', function(e) {
+  $(document).on('mouseup', '.dragdrop_dest', function(e) {
     endDragSource(e, clickPosition(e));
   });
-  $(document).on('touchend', function(e) {
+  $(document).on('touchend', '.dragdrop_dest', function(e) {
     endDragSource(e, touchPosition(e));
+  });
+
+  // ドラッグキャンセル
+  $(document).on('mouseup', function(e) {
+    cancelDragSource(e, clickPosition(e));
+  });
+  $(document).on('touchend', function(e) {
+    cancelDragSource(e, touchPosition(e));
   });
 }
 
@@ -77,10 +85,15 @@ function draggingSource(e, offset) {
 
 function endDragSource(e, offset) {
   if (drag_type !== null) {
-    var drop_point_element = document.elementFromPoint(offset.x, offset.y);
+    var drop_point_element = e.currentTarget;
     if (drop_point_element.classList.contains('dragdrop_dest') && drop_point_element.classList.contains(drag_type)) {
       self.endDrag(drop_point_element.dataset);
     }
+  }
+}
+
+function cancelDragSource(e, offset) {
+  if (drag_type !== null) {
     var dragging = $('.dragging.' + drag_type)[0];
     if (dragging) {
       dragging.style.display = 'none';

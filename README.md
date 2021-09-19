@@ -26,6 +26,8 @@ draggingに対して、
 data-offset_x_plus="0" data-offset_x_minus="0" data-offset_y_plus="0" data-offset_y_minus="0"
 を入れる
 
+draggingのクラスを付与したdivの親のpositionを使用するため、ひとつのdivで囲う必要がある
+
 CSS
 .draggingのdivへのCSS
 

@@ -2,7 +2,9 @@ var drag_type = null;
 var self = null;
 
 export default function dragdrop(_this) {
-  self = _this;
+  if (self === null) {
+    self = _this;
+  }
 
   // ドラッグ開始
   $(document).on('mousedown', '.dragdrop_origin', function(e) {
@@ -13,7 +15,6 @@ export default function dragdrop(_this) {
     e.preventDefault();
     startDragSource(e, touchPosition(e));
   });
-
 
 
   // ドラッグ中
@@ -30,6 +31,7 @@ export default function dragdrop(_this) {
     }
   }, {passive: false});
 
+
   // ドラッグ終了
   $(document).on('mouseup', '.dragdrop_dest', function(e) {
     endDragSource(e, clickPosition(e));
@@ -37,6 +39,7 @@ export default function dragdrop(_this) {
   $(document).on('touchend', '.dragdrop_dest', function(e) {
     endDragSource(e, touchPosition(e));
   });
+
 
   // ドラッグキャンセル
   $(document).on('mouseup', function(e) {
@@ -88,6 +91,7 @@ function endDragSource(e, offset) {
     var drop_point_element = e.currentTarget;
     if (drop_point_element.classList.contains('dragdrop_dest') && drop_point_element.classList.contains(drag_type)) {
       self.endDrag(drop_point_element.dataset);
+      cancelDragSource(e, offset);
     }
   }
 }

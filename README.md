@@ -1,4 +1,13 @@
-ドラッグ&ドロップをするためのライブラリです。
+# DragDrop ![](https://img.shields.io/badge/npm-v1.0.0-green)
+
+ドラッグ&ドロップのライブラリ
+by KazumaChihaya
+
+## インストール
+```bash
+npm install KazumaChihaya/dragdrop
+```
+
 
 インポート方法
 <script type="module" src="dragdropのindex.jsへのパス"></script>

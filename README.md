@@ -5,7 +5,7 @@ by KazumaChihaya
 
 ## インストール
 ```bash
-npm install KazumaChihaya/dragdrop
+npm i KazumaChihaya/dragdrop
 ```
 
 

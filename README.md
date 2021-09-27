@@ -46,6 +46,9 @@ function endDrag(dataset) {
 function cancelDrag() {
   // ドロップが終わったときとドラッグが中断したときに実行する内容
 }
+function hoverDrag(dataset) {
+  // ドラッグ中に実行する内容 datasetはホバー中の要素
+}
 ```
 この3つの関数を用意しておく必要がある。
 
@@ -68,6 +71,9 @@ function cancelDrag() {
     endDrag: function (dataset) {
       // ドロップしたときに実行する内容
     },
+    hoverDrag: function (dataset) {
+      // ホバー中に実行する内容 datasetはhover中の要素
+    },
     cancelDrag: function () {
       // ドロップが終わったときとドラッグが中断したときに実行する内容
     }
@@ -85,8 +91,16 @@ html要素のクラスやdata属性によってドラッグの操作を記述す
 ドラッグされる要素は、
 ```html
 <div class="dragdrop_origin" data-drag_type="任意のタグ">ドラッグされるもの</div>
-ドロップされる場所
+```
 のように、「dragdrop_origin」クラスの付与、任意の文字列をdata-drag_typeに指定する必要がある。
+
+### ホバー中の要素
+ホバーされる要素は、
+```html
+<div class="dragging_hover" data-drag_type="任意のタグ">ホバーされるもの</div>
+```
+のように、「dragdrop_hover」クラスの付与、任意の文字列をdata-drag_typeに指定する必要がある。
+
 
 ### ドラッグされている要素
 ドラッグされている際に表示されるhtml要素を作成する必要がある、

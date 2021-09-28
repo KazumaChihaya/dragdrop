@@ -1,9 +1,12 @@
 var drag_type = null;
-var self = null;
+var self = {};
+var dragdrop_origin_dataset = {};
+var dragdrop_hover_dataset = {};
+var dragging_dataset = {};
 
-export default function dragdrop(_this) {
-  if (self === null) {
-    self = _this;
+export default function dragdrop(_this, type) {
+  if (self[type] === undefined) {
+    self[type] = _this;
   }
 
   // ドラッグ開始
@@ -30,6 +33,14 @@ export default function dragdrop(_this) {
       draggingSource(e, touchPosition(e));
     }
   }, {passive: false});
+
+  // ホバー中
+  $(document).on('mouseenter', '.dragdrop_hover', function(e) {
+    mouseenterDragSource(e, clickPosition(e));
+  });
+  $(document).on('mouseleave', '.dragdrop_hover', function(e) {
+    mouseleaveDragSource(e, clickPosition(e));
+  });
 
 
   //ドラッグ終了・キャンセル
@@ -60,7 +71,36 @@ function startDragSource(e, offset) {
   if (drag_origin_element !== null && drag_origin_element.classList.contains('dragdrop_origin')) {
     e.preventDefault();
     drag_type = drag_origin_element.dataset.drag_type;
-    self.startDrag(drag_origin_element.dataset);
+    if (self[drag_type] !== undefined) {
+      dragdrop_origin_dataset[drag_type] = drag_origin_element.dataset;
+      self[drag_type].startDrag(drag_origin_element.dataset);
+    }
+  }
+}
+function mouseenterDragSource(e, offset) {
+  if (drag_type !== null) {
+    var hover_drag_element = e.currentTarget;
+    if (hover_drag_element !== null && hover_drag_element.classList.contains('dragdrop_hover')) {
+      e.preventDefault();
+      drag_type = hover_drag_element.dataset.drag_type;
+      dragdrop_hover_dataset[drag_type] = hover_drag_element.dataset;
+      if (self[drag_type] !== undefined) {
+        self[drag_type].mouseenterDrag(hover_drag_element.dataset);
+      }
+    }
+  }
+}
+function mouseleaveDragSource(e, offset) {
+  if (drag_type !== null) {
+    var hover_drag_element = e.currentTarget;
+    if (hover_drag_element !== null && hover_drag_element.classList.contains('dragdrop_hover')) {
+      e.preventDefault();
+      drag_type = hover_drag_element.dataset.drag_type;
+      dragdrop_hover_dataset[drag_type] = hover_drag_element.dataset;
+      if (self[drag_type] !== undefined) {
+        self[drag_type].mouseleaveDrag(hover_drag_element.dataset);
+      }
+    }
   }
 }
 function draggingSource(e, offset) {
@@ -72,6 +112,8 @@ function draggingSource(e, offset) {
       var offset_x_minus = Number(dragging.dataset.offset_x_minus) + parent_offset.left;
       var offset_y_plus = Number(dragging.dataset.offset_y_plus);
       var offset_y_minus = Number(dragging.dataset.offset_y_minus) + parent_offset.top;
+      
+      dragging_dataset[drag_type] = dragging.dataset;
 
       dragging.style.display = 'block';
       dragging.style.transform = 'translate(calc(calc(calc(' + offset.x + 'px + ' + window.pageXOffset + 'px) + ' + offset_x_plus + 'px) - ' + offset_x_minus + 'px), calc(calc(calc(' + offset.y + 'px + ' + window.pageYOffset + 'px) + ' + offset_y_plus + 'px) - ' + offset_y_minus + 'px))';
@@ -83,8 +125,10 @@ function endDragSource(e, offset) {
   if (drag_type !== null) {
     var drop_point_element = document.elementFromPoint(offset.x, offset.y);
     if (drop_point_element.classList.contains('dragdrop_dest') && drop_point_element.classList.contains(drag_type)) {
-      self.endDrag(drop_point_element.dataset);
-      cancelDragSource();
+      if (self[drag_type] !== undefined) {
+        self[drag_type].endDrag(dragdrop_origin_dataset[drag_type], dragging_dataset[drag_type], drop_point_element.dataset);
+        cancelDragSource();
+      }
     }
   }
 }
@@ -97,6 +141,8 @@ function cancelDragSource() {
     }
     drag_type = null;
   }
-  self.cancelDrag();
+  if (self[drag_type] !== undefined) {
+    self[drag_type].cancelDrag();
+  }
 }
 

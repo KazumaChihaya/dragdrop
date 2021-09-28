@@ -1,12 +1,12 @@
 var drag_type = null;
-var self = null;
+var self = {};
 var dragdrop_origin_dataset = {};
 var dragdrop_hover_dataset = {};
 var dragging_dataset = {};
 
-export default function dragdrop(_this) {
-  if (self === null) {
-    self = _this;
+export default function dragdrop(_this, type) {
+  if (self[type] === undefined) {
+    self[type] = _this;
   }
 
   // ドラッグ開始
@@ -73,8 +73,10 @@ function startDragSource(e, offset) {
   if (drag_origin_element !== null && drag_origin_element.classList.contains('dragdrop_origin')) {
     e.preventDefault();
     drag_type = drag_origin_element.dataset.drag_type;
-    dragdrop_origin_dataset[drag_type] = drag_origin_element.dataset;
-    self.startDrag(drag_origin_element.dataset);
+    if (self[drag_type] !== undefined) {
+      dragdrop_origin_dataset[drag_type] = drag_origin_element.dataset;
+      self[drag_type].startDrag(drag_origin_element.dataset);
+    }
   }
 }
 function hoverDragSource(e, offset) {
@@ -83,7 +85,9 @@ function hoverDragSource(e, offset) {
     e.preventDefault();
     drag_type = hover_drag_element.dataset.drag_type;
     dragdrop_hover_dataset[drag_type] = hover_drag_element.dataset;
-    self.hoverDrag(hover_drag_element.dataset);
+    if (self[drag_type] !== undefined) {
+      self[drag_type].hoverDrag(hover_drag_element.dataset);
+    }
   }
 }
 function draggingSource(e, offset) {
@@ -108,8 +112,10 @@ function endDragSource(e, offset) {
   if (drag_type !== null) {
     var drop_point_element = document.elementFromPoint(offset.x, offset.y);
     if (drop_point_element.classList.contains('dragdrop_dest') && drop_point_element.classList.contains(drag_type)) {
-      self.endDrag(dragdrop_origin_dataset[drag_type], dragging_dataset[drag_type], drop_point_element.dataset);
-      cancelDragSource();
+      if (self[drag_type] !== undefined) {
+        self.endDrag(dragdrop_origin_dataset[drag_type], dragging_dataset[drag_type], drop_point_element.dataset);
+        cancelDragSource();
+      }
     }
   }
 }
@@ -122,6 +128,8 @@ function cancelDragSource() {
     }
     drag_type = null;
   }
-  self.cancelDrag();
+  if (self[drag_type] !== undefined) {
+    self.cancelDrag();
+  }
 }
 

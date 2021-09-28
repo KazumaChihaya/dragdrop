@@ -35,13 +35,11 @@ export default function dragdrop(_this, type) {
   }, {passive: false});
 
   // ホバー中
-  $(document).on('hover', '.dragdrop_hover', function(e) {
-    e.preventDefault();
-    hoverDragSource(e, clickPosition(e));
+  $(document).on('mouseenter', '.dragdrop_hover', function(e) {
+    mouseenterDragSource(e, clickPosition(e));
   });
-  $(document).on('touchstart', '.dragdrop_hover', function(e) {
-    e.preventDefault();
-    hoverDragSource(e, touchPosition(e));
+  $(document).on('mouseleave', '.dragdrop_hover', function(e) {
+    mouseleaveDragSource(e, clickPosition(e));
   });
 
 
@@ -79,14 +77,29 @@ function startDragSource(e, offset) {
     }
   }
 }
-function hoverDragSource(e, offset) {
-  var hover_drag_element = e.currentTarget;
-  if (hover_drag_element !== null && hover_drag_element.classList.contains('dragdrop_hover')) {
-    e.preventDefault();
-    drag_type = hover_drag_element.dataset.drag_type;
-    dragdrop_hover_dataset[drag_type] = hover_drag_element.dataset;
-    if (self[drag_type] !== undefined) {
-      self[drag_type].hoverDrag(hover_drag_element.dataset);
+function mouseenterDragSource(e, offset) {
+  if (drag_type !== null) {
+    var hover_drag_element = e.currentTarget;
+    if (hover_drag_element !== null && hover_drag_element.classList.contains('dragdrop_hover')) {
+      e.preventDefault();
+      drag_type = hover_drag_element.dataset.drag_type;
+      dragdrop_hover_dataset[drag_type] = hover_drag_element.dataset;
+      if (self[drag_type] !== undefined) {
+        self[drag_type].mouseenterDrag(hover_drag_element.dataset);
+      }
+    }
+  }
+}
+function mouseleaveDragSource(e, offset) {
+  if (drag_type !== null) {
+    var hover_drag_element = e.currentTarget;
+    if (hover_drag_element !== null && hover_drag_element.classList.contains('dragdrop_hover')) {
+      e.preventDefault();
+      drag_type = hover_drag_element.dataset.drag_type;
+      dragdrop_hover_dataset[drag_type] = hover_drag_element.dataset;
+      if (self[drag_type] !== undefined) {
+        self[drag_type].mouseleaveDrag(hover_drag_element.dataset);
+      }
     }
   }
 }

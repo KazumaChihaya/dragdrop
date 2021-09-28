@@ -40,14 +40,17 @@ created() {
 function startDrag(dataset) {
   // ドラッグが始まったときに実行する内容
 }
-function endDrag(dataset) {
+function endDrag(origin_dataset, dragging_dataset, dest_dataset) {
   // ドロップしたときに実行する内容
 }
 function cancelDrag() {
   // ドロップが終わったときとドラッグが中断したときに実行する内容
 }
-function hoverDrag(dataset) {
-  // ドラッグ中に実行する内容 datasetはホバー中の要素
+function mouseenterDrag(origin_dataset, dragging_dataset, hover_dataset) {
+  // ホバーでマウスが入った時に実行する内容
+}
+function mouseleaveDrag(origin_dataset, dragging_dataset, hover_dataset) {
+  // ホバーでマウスがでた時に実行する内容
 }
 ```
 この3つの関数を用意しておく必要がある。
@@ -68,14 +71,17 @@ function hoverDrag(dataset) {
     startDrag: function(dataset) {
       // ドラッグが始まったときに実行する内容
     },
-    endDrag: function (dataset) {
+    endDrag: function (origin_dataset, dragging_dataset, dest_dataset) {
       // ドロップしたときに実行する内容
-    },
-    hoverDrag: function (dataset) {
-      // ホバー中に実行する内容 datasetはhover中の要素
     },
     cancelDrag: function () {
       // ドロップが終わったときとドラッグが中断したときに実行する内容
+    },
+    mouseenterDrag: function (origin_dataset, dragging_dataset, hover_dataset) {
+      // ホバーでマウスが入った時に実行する内容
+    },
+    mouseleaveDrag: function (origin_dataset, dragging_dataset, hover_dataset) {
+      // ホバーでマウスがでた時に実行する内容
     }
   };
 </script>
@@ -97,7 +103,7 @@ html要素のクラスやdata属性によってドラッグの操作を記述す
 ### ホバー中の要素
 ホバーされる要素は、
 ```html
-<div class="dragging_hover" data-drag_type="任意のタグ">ホバーされるもの</div>
+<div class="dragdrop_hover 任意のタグ" data-drag_type="任意のタグ">ホバーされるもの</div>
 ```
 のように、「dragdrop_hover」クラスの付与、任意の文字列をdata-drag_typeに指定する必要がある。
 

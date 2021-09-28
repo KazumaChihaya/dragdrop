@@ -139,10 +139,10 @@ function cancelDragSource() {
     if (dragging) {
       dragging.style.display = 'none';
     }
+    if (self[drag_type] !== undefined) {
+      self[drag_type].cancelDrag();
+    }
     drag_type = null;
-  }
-  if (self[drag_type] !== undefined) {
-    self[drag_type].cancelDrag();
   }
 }
 

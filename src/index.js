@@ -113,7 +113,7 @@ function endDragSource(e, offset) {
     var drop_point_element = document.elementFromPoint(offset.x, offset.y);
     if (drop_point_element.classList.contains('dragdrop_dest') && drop_point_element.classList.contains(drag_type)) {
       if (self[drag_type] !== undefined) {
-        self.endDrag(dragdrop_origin_dataset[drag_type], dragging_dataset[drag_type], drop_point_element.dataset);
+        self[drag_type].endDrag(dragdrop_origin_dataset[drag_type], dragging_dataset[drag_type], drop_point_element.dataset);
         cancelDragSource();
       }
     }
@@ -129,7 +129,7 @@ function cancelDragSource() {
     drag_type = null;
   }
   if (self[drag_type] !== undefined) {
-    self.cancelDrag();
+    self[drag_type].cancelDrag();
   }
 }
 

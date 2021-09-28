@@ -85,7 +85,7 @@ function mouseenterDragSource(e, offset) {
       drag_type = hover_drag_element.dataset.drag_type;
       dragdrop_hover_dataset[drag_type] = hover_drag_element.dataset;
       if (self[drag_type] !== undefined) {
-        self[drag_type].mouseenterDrag(hover_drag_element.dataset);
+        self[drag_type].mouseenterDrag(dragdrop_origin_dataset[drag_type], dragging_dataset[drag_type], hover_drag_element.dataset);
       }
     }
   }
@@ -98,7 +98,7 @@ function mouseleaveDragSource(e, offset) {
       drag_type = hover_drag_element.dataset.drag_type;
       dragdrop_hover_dataset[drag_type] = hover_drag_element.dataset;
       if (self[drag_type] !== undefined) {
-        self[drag_type].mouseleaveDrag(hover_drag_element.dataset);
+        self[drag_type].mouseleaveDrag(dragdrop_origin_dataset[drag_type], dragging_dataset[drag_type], hover_drag_element.dataset);
       }
     }
   }

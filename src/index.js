@@ -52,6 +52,22 @@ export default function dragdrop(_this, type) {
     endDragSource(e, touchPosition(e)); 
     cancelDragSource();
   });
+
+
+  $(document).on('contextmenu', '.right_click_origin', function(e) {
+    e.preventDefault();
+    var right_click_element = e.currentTarget;
+    if (right_click_element !== null) {
+      right_click_type = right_click_element.dataset.right_click_type;
+
+      var right_click_menu = $('.right_click_menu.' + right_click_type)[0];
+      if (right_click_menu) {
+        right_click_menu.style.left=e.pageX+"px";
+        right_click_menu.style.top=e.pageY+"px";
+        right_click_menu.style.display = 'block';
+      }
+    }
+  });
 }
 
 // 位置取得

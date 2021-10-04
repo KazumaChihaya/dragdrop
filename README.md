@@ -1,4 +1,4 @@
-# DragDrop ![](https://img.shields.io/badge/npm-v1.2.0-green)
+# DragDrop ![](https://img.shields.io/badge/npm-v1.2.1-3-gbf5f8bd-green)
 
 ドラッグ&ドロップのライブラリ
 by KazumaChihaya

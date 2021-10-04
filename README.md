@@ -52,6 +52,9 @@ function mouseenterDrag(origin_dataset, dragging_dataset, hover_dataset) {
 function mouseleaveDrag(origin_dataset, dragging_dataset, hover_dataset) {
   // ホバーでマウスがでた時に実行する内容
 }
+function rightClick(dataset) {
+  // 右クリックされたときに実行される内容
+},
 ```
 この3つの関数を用意しておく必要がある。
 
@@ -82,7 +85,10 @@ function mouseleaveDrag(origin_dataset, dragging_dataset, hover_dataset) {
     },
     mouseleaveDrag: function (origin_dataset, dragging_dataset, hover_dataset) {
       // ホバーでマウスがでた時に実行する内容
-    }
+    },
+    rightClick: function (dataset) {
+      // 右クリックされたときに実行される内容
+    },
   };
 </script>
 ```
@@ -153,3 +159,25 @@ iPadなどのタッチによるドラッグにも対応している。
 
 ## レスポンシブ
 スマホなどではドラッグ&ドロップをしたくないということであれば、画面サイズによってdragdrop_originやdragdrop_destのクラスを消すことで対応可能。
+
+
+## 右クリックを使用する(v1.3.0で追加)
+
+### 右クリックされる要素
+右クリックされる要素は、
+```html
+<div class="right_click_origin" data-drag_type="任意のタグ">右クリックされるもの</div>
+```
+のように、「right_click_origin」クラスの付与、任意の文字列をdata-drag_typeに指定する必要がある。
+
+
+### 右クリックされたときに表示するもの
+右クリックされたときに表示される要素は、
+```html
+<div class="right_click_menu 任意のタグ">表示されるもの</div>
+```
+のように、「right_click_menu」と任意のタグのクラスの付与が必要である。
+
+
+## タグの意味
+ドラッグ&ドロップ同様

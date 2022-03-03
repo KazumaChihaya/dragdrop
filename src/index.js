@@ -1,73 +1,71 @@
 var drag_type = null;
+var right_click_type = null;
 var self = {};
 var dragdrop_origin_dataset = {};
 var dragdrop_hover_dataset = {};
 var dragging_dataset = {};
+var right_clicking = false;
+var first_regist = true;
 
 export default function dragdrop(_this, type) {
   if (self[type] === undefined) {
     self[type] = _this;
   }
 
-  // ドラッグ開始
-  $(document).on('mousedown', '.dragdrop_origin', function(e) {
-    e.preventDefault();
-    startDragSource(e, clickPosition(e));
-  });
-  $(document).on('touchstart', '.dragdrop_origin', function(e) {
-    e.preventDefault();
-    startDragSource(e, touchPosition(e));
-  });
-
-
-  // ドラッグ中
-  document.addEventListener('mousemove', function(e) {
-    if (drag_type !== null) {
+  if (first_regist) {
+    // ドラッグ開始
+    $(document).on('mousedown', '.dragdrop_origin', function(e) {
       e.preventDefault();
-      draggingSource(e, clickPosition(e));
-    }
-  });
-  document.addEventListener('touchmove', function(e) {
-    if (drag_type !== null) {
+      startDragSource(e, clickPosition(e));
+    });
+    $(document).on('touchstart', '.dragdrop_origin', function(e) {
       e.preventDefault();
-      draggingSource(e, touchPosition(e));
-    }
-  }, {passive: false});
-
-  // ホバー中
-  $(document).on('mouseenter', '.dragdrop_hover', function(e) {
-    mouseenterDragSource(e, clickPosition(e));
-  });
-  $(document).on('mouseleave', '.dragdrop_hover', function(e) {
-    mouseleaveDragSource(e, clickPosition(e));
-  });
+      startDragSource(e, touchPosition(e));
+    });
 
 
-  //ドラッグ終了・キャンセル
-  $(document).on('mouseup', function(e) {
-    endDragSource(e, clickPosition(e)); 
-    cancelDragSource();
-  });
-  $(document).on('touchend', function(e) {
-    endDragSource(e, touchPosition(e)); 
-    cancelDragSource();
-  });
-
-
-  $(document).on('contextmenu', '.right_click_origin', function(e) {
-    e.preventDefault();
-    var right_click_element = e.currentTarget;
-    if (right_click_element !== null) {
-      var right_click_type = right_click_element.dataset.right_click_type;
-
-      var right_click_menu = $('.right_click_menu.' + right_click_type)[0];
-      if (right_click_menu) {
-        right_click_menu.style.left=e.pageX+"px";
-        right_click_menu.style.top=e.pageY+"px";
-        right_click_menu.style.display = 'block';
+    // ドラッグ中
+    document.addEventListener('mousemove', function(e) {
+      if (drag_type !== null) {
+        e.preventDefault();
+        draggingSource(e, clickPosition(e));
       }
-    }
-  });
+    });
+    document.addEventListener('touchmove', function(e) {
+      if (drag_type !== null) {
+        e.preventDefault();
+        draggingSource(e, touchPosition(e));
+      }
+    }, {passive: false});
+
+    // ホバー中
+    $(document).on('mouseenter', '.dragdrop_hover', function(e) {
+      mouseenterDragSource(e, clickPosition(e));
+    });
+    $(document).on('mouseleave', '.dragdrop_hover', function(e) {
+      mouseleaveDragSource(e, clickPosition(e));
+    });
+
+
+    //ドラッグ終了・キャンセル
+    $(document).on('mouseup', function(e) {
+      endDragSource(e, clickPosition(e)); 
+      cancelDragSource();
+      cancelRightClickSource();
+    });
+    $(document).on('touchend', function(e) {
+      endDragSource(e, touchPosition(e)); 
+      cancelDragSource();
+      cancelRightClickSource();
+    });
+
+
+    $(document).on('contextmenu', '.right_click_origin', function(e) {
+      e.preventDefault();
+      rightClick(e, clickPosition(e));
+    });
+  }
+  first_regist = false;
 }
 
 // 位置取得
@@ -89,7 +87,9 @@ function startDragSource(e, offset) {
     drag_type = drag_origin_element.dataset.drag_type;
     if (self[drag_type] !== undefined) {
       dragdrop_origin_dataset[drag_type] = drag_origin_element.dataset;
-      self[drag_type].startDrag(drag_origin_element.dataset);
+      if (self[drag_type].startDrag) {
+        self[drag_type].startDrag(drag_origin_element.dataset);
+      }
     }
   }
 }
@@ -99,7 +99,9 @@ function mouseenterDragSource(e, offset) {
     if (hover_drag_element !== null && hover_drag_element.classList.contains('dragdrop_hover') && hover_drag_element.classList.contains(drag_type)) {
       dragdrop_hover_dataset[drag_type] = hover_drag_element.dataset;
       if (self[drag_type] !== undefined) {
-        self[drag_type].mouseenterDrag(dragdrop_origin_dataset[drag_type], dragging_dataset[drag_type], hover_drag_element.dataset);
+        if (self[drag_type].mouseenterDrag) {
+          self[drag_type].mouseenterDrag(dragdrop_origin_dataset[drag_type], dragging_dataset[drag_type], hover_drag_element.dataset);
+        }
       }
     }
   }
@@ -111,7 +113,9 @@ function mouseleaveDragSource(e, offset) {
       e.preventDefault();
       dragdrop_hover_dataset[drag_type] = hover_drag_element.dataset;
       if (self[drag_type] !== undefined) {
-        self[drag_type].mouseleaveDrag(dragdrop_origin_dataset[drag_type], dragging_dataset[drag_type], hover_drag_element.dataset);
+        if (self[drag_type].mouseleaveDrag) {
+          self[drag_type].mouseleaveDrag(dragdrop_origin_dataset[drag_type], dragging_dataset[drag_type], hover_drag_element.dataset);
+        }
       }
     }
   }
@@ -139,7 +143,9 @@ function endDragSource(e, offset) {
     var drop_point_element = document.elementFromPoint(offset.x, offset.y);
     if (drop_point_element.classList.contains('dragdrop_dest') && drop_point_element.classList.contains(drag_type)) {
       if (self[drag_type] !== undefined) {
-        self[drag_type].endDrag(dragdrop_origin_dataset[drag_type], dragging_dataset[drag_type], drop_point_element.dataset);
+        if (self[drag_type].endDrag) {
+          self[drag_type].endDrag(dragdrop_origin_dataset[drag_type], dragging_dataset[drag_type], drop_point_element.dataset);
+        }
         cancelDragSource();
       }
     }
@@ -153,9 +159,53 @@ function cancelDragSource() {
       dragging.style.display = 'none';
     }
     if (self[drag_type] !== undefined) {
-      self[drag_type].cancelDrag();
+      if (self[drag_type].cancelDrag) {
+        self[drag_type].cancelDrag();
+      }
     }
     drag_type = null;
+  }
+}
+function cancelRightClickSource() {
+  if (right_click_type !== null && !right_clicking) {
+    var right_click_menu = $('.right_click_menu.' + right_click_type)[0];
+    if (right_click_menu) {
+      right_click_menu.style.display = 'none';
+    } 
+    if (self[right_click_type] !== undefined) {
+      if (self[right_click_type].cancelRightClick) {
+        self[right_click_type].cancelRightClick();
+      }
+    }
+    right_click_type = null;
+  }
+  right_clicking = false;
+}
+
+function rightClick(e, offset) {
+  var right_click_element = e.currentTarget;
+  if (right_click_element !== null) {
+    right_click_type = right_click_element.dataset.right_click_type;
+
+    var right_click_menu = $('.right_click_menu.' + right_click_type)[0];
+    if (right_click_menu) {
+
+      var parent_offset = $(right_click_menu).parent().offset();
+      var offset_x_plus = Number(right_click_menu.dataset.offset_x_plus);
+      var offset_x_minus = Number(right_click_menu.dataset.offset_x_minus) + parent_offset.left;
+      var offset_y_plus = Number(right_click_menu.dataset.offset_y_plus);
+      var offset_y_minus = Number(right_click_menu.dataset.offset_y_minus) + parent_offset.top;
+
+      right_click_menu.style.transform = 'translate(calc(calc(calc(' + offset.x + 'px + ' + window.pageXOffset + 'px) + ' + offset_x_plus + 'px) - ' + offset_x_minus + 'px), calc(calc(calc(' + offset.y + 'px + ' + window.pageYOffset + 'px) + ' + offset_y_plus + 'px) - ' + offset_y_minus + 'px))';
+      right_click_menu.style.display = 'block';
+      right_clicking = true;
+
+      if (self[right_click_type] !== undefined) {
+        if (self[right_click_type].rightClick) {
+          self[right_click_type].rightClick(right_click_element.dataset);
+        }
+      }
+    }
   }
 }
 

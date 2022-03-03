@@ -58,7 +58,7 @@ export default function dragdrop(_this, type) {
     e.preventDefault();
     var right_click_element = e.currentTarget;
     if (right_click_element !== null) {
-      right_click_type = right_click_element.dataset.right_click_type;
+      var right_click_type = right_click_element.dataset.right_click_type;
 
       var right_click_menu = $('.right_click_menu.' + right_click_type)[0];
       if (right_click_menu) {

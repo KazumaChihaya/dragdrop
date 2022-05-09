@@ -8,9 +8,7 @@ var right_clicking = false;
 var first_regist = true;
 
 export default function dragdrop(_this, type) {
-  if (self[type] === undefined) {
-    self[type] = _this;
-  }
+  self[type] = _this;
 
   if (first_regist) {
     // ドラッグ開始
